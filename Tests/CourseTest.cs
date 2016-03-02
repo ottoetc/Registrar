@@ -55,10 +55,40 @@ namespace RegistrarApp
 
       Assert.Equal(testId, result);
     }
+
+    [Fact]
+    public void Test_Finds_Course()
+    {
+      Course testCourse = new Course("HIST", 101);
+      testCourse.Save();
+
+      Course foundCourse = Course.Find(testCourse.GetId());
+
+      Assert.Equal(foundCourse, testCourse);
+    }
     public void Dispose()
     {
       Student.DeleteAll();
       Course.DeleteAll();
     }
+    [Fact]
+    public void Test_Delete_DeletesCourseAssociationsFromDatabase()
+    {
+      DateTime enrollmentDate = new DateTime(2016, 01, 04);
+      Student testStudent = new Student("Nathan Otto", enrollmentDate)
+      testStudent.Save();
+
+      Course testCoursez  = new Course("HIST", 321);
+      testCoursez.Save();
+
+      testCourse.AddStudent(testStudent);
+      testCourse.Delete();
+
+      List<Course> resultStudentCourses = test.Student.GetCourses();
+      List<Course> testStudentCourses = new List<Course> {};
+
+      Assert.Equal(testStudentCourses, resultStudentCourses);
+    }
+
   }
 }
